@@ -1,29 +1,23 @@
-#include<bits/stdc++.h>
+#include <cstdio>
+#include <cmath>
+#include <algorithm>
 
 using namespace std;
 
-#define MAX 100'001
+int ipt, dp[100005];
+
+int main() {
+    scanf("%d", &ipt);
+
+    for (int i = 1; i <= ipt; i++) dp[i] = i; // 1^2 + 1^2 + 1^2 + ...
+
+    int lmt = sqrt(ipt + 1);
+    for (int i = 2; i <= lmt; i++)
+        for (int idx = i * i; idx <= ipt; idx++)
+            dp[idx] = min(dp[idx], dp[idx - i * i] + 1);
 
 
+    printf("%d\n", dp[ipt]);
 
-int main()
-{
-    int arr[MAX]={};
-    cin.tie(NULL);
-    cout.tie(NULL);
-    ios_base::sync_with_stdio(false);
-
-    int a;
-    cin>>a;
-
-    for(int i=0;i<=a;i++){
-        arr[i]=i;
-    }
-
-    for(int i=1;i<=a;i++){
-        for(int j=0;j*j<=i;j++){
-            arr[i]=min(arr[i-j*j]+1,arr[i]);
-        }
-    }
-    cout<<arr[a];
+    return 0;
 }
