@@ -8,7 +8,7 @@ int main()
     cout.tie(NULL);
     ios_base::sync_with_stdio(false);
 
-    priority_queue<int> arr[6];
+    stack<int> arr[6];
 
     int n,p;
     cin>>n>>p;
