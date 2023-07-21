@@ -5,19 +5,13 @@ using namespace std;
 int dp[MAX];
 int arr[MAX];
 
-int fm(int a)
-{
-    int m=0;
-    for(int i=0;i<=a;i++){
-        m=max(m,dp[i]);
-    }
-    return m;
-}
-
 int f(int a)
 {
-    if(dp[a]==-1){
-        dp[a]=max(arr[a-1]+fm(a-3),fm(a-2))+arr[a];
+    if(a<0){
+        return 0;
+    }
+    else if(dp[a]==-1){
+        dp[a]=max({arr[a]+arr[a-1]+f(a-3),f(a-2)+arr[a],f(a-1)});
     }
     return dp[a];
 }
@@ -38,18 +32,7 @@ int main()
     for(int i=0;i<n;i++){
         dp[i]=-1;
     }
-
     dp[0]=arr[0];
-    if(n>=2){
-        dp[1]=dp[0]+arr[1];
-    }
-    if(n>=3){
-        dp[2]=max(arr[0],arr[1])+arr[2];
-    }
 
-    for(int i=3;i<n;i++){
-        f(i);
-    }
-
-    cout<<*max_element(dp,dp+n);
+    cout<<f(n-1);
 }
