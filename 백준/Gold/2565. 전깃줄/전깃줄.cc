@@ -17,9 +17,7 @@ int main()
         int a,b;
         cin>>a>>b;
         arr.push_back({a,b});
-    }
 
-    for(int i=0;i<501;i++){
         dp[i]=1;
     }
 
