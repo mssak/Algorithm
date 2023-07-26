@@ -1,8 +1,8 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-pair<int,int> arr[101];
-int dp[101][100'001]={0};
+pair<int,int> arr[100];
+int dp[100][100'001]={0};
 
 int f(int a,int w)
 {
@@ -36,6 +36,6 @@ int main()
         arr[i]={a,b};
     }
 
-    f(n,k);
-    cout<<dp[n][k];
+    f(n-1,k);
+    cout<<dp[n-1][k];
 }
