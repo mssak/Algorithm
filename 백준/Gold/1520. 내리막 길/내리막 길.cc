@@ -2,7 +2,7 @@
 #define MAX 500
 using namespace std;
 
-int M, N, H;
+int M, N;
 int arr[MAX][MAX];
 int dp[MAX][MAX];
 int dx[] = {-1, 0, 1, 0};
