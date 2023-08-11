@@ -1,26 +1,24 @@
 #include <bits/stdc++.h>
-#define MAX 
+#define MAX 5
 using namespace std;
 typedef long long ll;
-typedef vector<vector<ll>> vv;
-typedef vector<ll> v;
 
 ll n, B;
-vv arr(5, v(5));
-vv result(5, v(5, 0));
-vv temp(5, v(5, 0));
+ll arr[MAX][MAX];
+ll result[MAX][MAX];
+ll temp[MAX][MAX];
 
-void mul(vv& a, vv& b) {
+void mul(ll a[MAX][MAX], ll b[MAX][MAX]) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             temp[i][j] = 0;
             for (int k = 0; k < n; k++) {
                 temp[i][j] += a[i][k] * b[k][j];
             }
-            temp[i][j] %= 1'000;
+            temp[i][j] %= 1000;
         }
     }
-    swap(a, temp);
+    memcpy(a, temp, sizeof(temp));
 }
 
 void f(ll b) {
@@ -40,10 +38,10 @@ void f(ll b) {
     }
 }
 
-void print(vv& a) {
+void print(ll a[MAX][MAX]) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            printf("%d ", a[i][j]);
+            printf("%lld ", a[i][j]);
         }
         printf("\n");
     }
