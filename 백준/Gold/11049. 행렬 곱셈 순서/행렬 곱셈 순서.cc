@@ -1,9 +1,6 @@
 #include<bits/stdc++.h>
-#define MAX 500 
+#define MAX 500
 using namespace std;
-
-int dp[MAX][MAX];
-int mat[MAX][2];
 
 int main()
 {
@@ -11,6 +8,9 @@ int main()
     cout.tie(NULL);
     ios_base::sync_with_stdio(false);
 
+    
+    int dp[MAX][MAX]{0};
+    int mat[MAX][2];
     int n;
     cin>>n;
 
