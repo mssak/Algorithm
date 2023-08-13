@@ -24,7 +24,7 @@ int main()
     for(int i=1;i<n;i++){
         for(int j=0;i+j<n;j++){
             dp[j][i+j]=INT_MAX;
-            for(int k=j;k<=i+j;k++){
+            for(int k=j;k<i+j;k++){
                 dp[j][j+i]=min(dp[j][j+i],dp[j][k]+dp[k+1][j+i]+mat[j][0]*mat[k][1]*mat[i+j][1]);
             }
         }
