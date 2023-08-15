@@ -4,6 +4,7 @@ using namespace std;
 
 int arr[MAX];
 int dp[MAX][MAX];
+int s[MAX];
 
 int f(int a,int b)
 {
@@ -18,7 +19,10 @@ int f(int a,int b)
         for(int i=a;i<b;i++){
             dp[a][b]=min(dp[a][b],f(a,i)+f(i+1,b));
         }
-        dp[a][b]+=accumulate(arr+a,arr+b+1,0);
+        dp[a][b]+=s[b];
+        if(a!=0){
+            dp[a][b]-=s[a-1];
+        }
         return dp[a][b];
     }
 }
@@ -35,8 +39,11 @@ int main()
     while(t--){
         int n;
         cin>>n;
+        int ss=0;
         for(int i=0;i<n;i++){
             cin>>arr[i];
+            ss+=arr[i];
+            s[i]=ss;
         }
         for(int i=0;i<n;i++){
             for(int j=0;j<n;j++){
