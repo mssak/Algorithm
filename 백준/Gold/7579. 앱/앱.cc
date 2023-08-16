@@ -47,11 +47,9 @@ int main()
 
 
     int r=INT_MAX;
-    for(int i=0;i<n;i++){
-        for(int j=0;j<MAX2;j++){
-            if(f(i,j)>=m){
-                r=min(r,j);
-            }
+    for(int i=0;i<MAX2;i++){
+        if(f(n-1,i)>=m){
+            r=min(r,i);
         }
     }
 
