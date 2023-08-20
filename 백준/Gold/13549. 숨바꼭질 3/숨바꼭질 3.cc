@@ -6,7 +6,6 @@ using pii = pair<int,int>;
 int main()
 {
     cin.tie(NULL);
-    cout.tie(NULL);
     ios_base::sync_with_stdio(false);
 
     int n,k;
@@ -29,9 +28,9 @@ int main()
             cout<<d;
             return 0;
         }
-        else if(d>dist[c]){
-            continue;
-        }
+        // else if(d>dist[c]){
+        //     continue;
+        // }
         else{
             if(c-1>=0 && dist[c-1]>d+1){
                 dist[c-1]=d+1;
