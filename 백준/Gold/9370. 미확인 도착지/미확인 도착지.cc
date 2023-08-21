@@ -1,85 +1,93 @@
-#include <iostream>
-#include <vector>
-#include <queue>
-#include <algorithm>
+#include <bits/stdc++.h>
+#define INF 0x7FFFFFFF
 
-#define INF 1e9
 
 using namespace std;
 
-int T, n, m, t, s, g, h, a, b, d;
+typedef struct {
+	int v, w;
+} edge;
+struct comp {
+	bool operator() (const edge &e1, const edge &e2) {
+		return e1.w > e2.w;
+	}
+};
+int n, m, t, s, g, h;
+vector<vector<edge>> graph(2001);
+vector<int> candi;
+priority_queue<edge, vector<edge>, comp> pq;
+int dist[2001];
 
-vector<pair<int, int>> graph[2001];
-int candidate[100];
+void input() {
+	cin >> n >> m >> t >> s >> g >> h;
+	for (int i = 1; i <= n; i++) {
+		graph[i].clear();
+	}
+	candi.clear();
+	for (int i = 0; i < m; i++) {
+		int a, b, d; cin >> a >> b >> d;
+		graph[a].push_back((edge){b, d}); graph[b].push_back((edge){a, d});
+	}
+	for (int i = 0; i < t; i++) {
+		int a; cin >> a;
+		candi.push_back(a);
+	}
+}
 
-void dijkstra(int start, vector<int>& distance) {
-    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-    pq.push({0, start});
-    distance[start] = 0;
-
-    while (!pq.empty()) {
-        int dist = pq.top().first;
-        int now = pq.top().second;
-        pq.pop();
-
-        if (distance[now] < dist) continue;
-
-        for (auto& i : graph[now]) {
-            int cost = dist + i.second;
-            if (cost < distance[i.first]) {
-                distance[i.first] = cost;
-                pq.push({cost, i.first});
-            }
-        }
-    }
+void dijk(int start) {
+	pq = priority_queue<edge, vector<edge>, comp>();
+	for (int i = 1; i <= n; i++) dist[i] = INF;
+	dist[start] = 0;
+	pq.push((edge){start, 0});
+	while (!pq.empty()) {
+		edge p = pq.top(); pq.pop();
+		for (int i = 0; i < graph[p.v].size(); i++) {
+			edge e = graph[p.v][i];
+			if (dist[e.v] <= dist[p.v] + e.w) continue;
+			dist[e.v] = dist[p.v] + e.w;
+			pq.push((edge){e.v, dist[e.v]});
+		}
+	}
 }
 
 int main() {
-    cin >> T;
+	cin.tie(NULL); cout.tie(NULL); cin.sync_with_stdio(false); cout.sync_with_stdio(false);
+	int test; cin >> test;
+	while (test--) {
+		input();
 
-    while (T--) {
-        cin >> n >> m >> t;
-        cin >> s >> g >> h;
+		vector<int> stog(t);
+		vector<int> sum1(t); // s -> g -> h -> goal
+		vector<int> sum2(t); // s -> h -> g -> goal
 
-        for (int i = 1; i <= n; i++) {
-            graph[i].clear();
-        }
+		dijk(s);
+		int S_H = dist[h];
+		int S_G = dist[g];
+		for (int i = 0; i < t; i++) stog[i] = dist[candi[i]];
 
-        int ghDist = 0;
-        for (int i = 0; i < m; i++) {
-            cin >> a >> b >> d;
-            graph[a].push_back({b, d});
-            graph[b].push_back({a, d});
-            if ((a == g && b == h) || (a == h && b == g)) ghDist = d;
-        }
+		dijk(g);
+		int G_H = dist[h];
+		for (int i = 0; i < t; i++) sum2[i] += dist[candi[i]];
 
-        for (int i = 0; i < t; i++) {
-            cin >> candidate[i];
-        }
+		dijk(h);
+		for (int i = 0; i < t; i++) sum1[i] += dist[candi[i]];
 
-        vector<int> distanceFromS(n + 1, INF);
-        vector<int> distanceFromG(n + 1, INF);
-        vector<int> distanceFromH(n + 1, INF);
+		for (int i = 0; i < t; i++) {
+			sum2[i] += S_H + G_H;
+			sum1[i] += S_G + G_H;
+		}
 
-        dijkstra(s, distanceFromS);
-        dijkstra(g, distanceFromG);
-        dijkstra(h, distanceFromH);
-
-        vector<int> result;
-        for (int i = 0; i < t; i++) {
-            int x = candidate[i];
-            if (distanceFromS[g] + ghDist + distanceFromH[x] == distanceFromS[x] ||
-                distanceFromS[h] + ghDist + distanceFromG[x] == distanceFromS[x]) {
-                result.push_back(x);
-            }
-        }
-
-        sort(result.begin(), result.end());
-        for (int x : result) {
-            cout << x << " ";
-        }
-        cout << '\n';
-    }
-
-    return 0;
+		vector<int> ans;
+		for (int i = 0; i < t; i++) {
+			if (stog[i] == min(sum1[i], sum2[i])) {
+				ans.push_back(candi[i]);
+			}
+		}
+		sort(ans.begin(), ans.end());
+		for (int i = 0; i < ans.size(); i++) {
+			cout << ans[i] << ' ';
+		}
+		cout << '\n';
+	}
+	return 0;
 }
