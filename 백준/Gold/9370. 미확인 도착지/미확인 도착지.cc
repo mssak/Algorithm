@@ -67,10 +67,10 @@ int main() {
 
 		dijk(g);
 		int G_H = dist[h];
-		for (int i = 0; i < t; i++) sum2[i] += dist[candi[i]];
+		for (int i = 0; i < t; i++) sum2[i] = dist[candi[i]];
 
 		dijk(h);
-		for (int i = 0; i < t; i++) sum1[i] += dist[candi[i]];
+		for (int i = 0; i < t; i++) sum1[i] = dist[candi[i]];
 
 		for (int i = 0; i < t; i++) {
 			sum2[i] += S_H + G_H;
