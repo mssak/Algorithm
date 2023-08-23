@@ -1,46 +1,58 @@
-#include <iostream>
-#include <vector>
-#include <limits.h>
-
+#include <bits/stdc++.h>
 using namespace std;
+using pll = pair<long long, long long>;
 
 int main() {
-    int N, M;
-    cin >> N >> M;
-    vector<vector<pair<int, int>>> adj(N + 1);
-    vector<long long> dist(N + 1, LLONG_MAX);
+    cin.tie(NULL);
+    ios_base::sync_with_stdio(false);
 
-    for (int i = 0; i < M; i++) {
-        int A, B, C;
-        cin >> A >> B >> C;
-        adj[A].push_back({B, C});
+    int n, m;
+    cin >> n >> m;
+
+    vector<vector<pll>> edge(n + 1);
+
+    for (int i = 0; i < m; i++) {
+        int a, b;
+        long long c;
+        cin >> a >> b >> c;
+        edge[a].push_back({c, b});
     }
 
+    long long dist[n + 1];
+    for (int i = 0; i < n + 1; i++) {
+        dist[i] = LLONG_MAX;
+    }
     dist[1] = 0;
-    bool negativeCycle = false;
 
-    for (int i = 1; i <= N; i++) {
-        for (int j = 1; j <= N; j++) {
-            for (auto &bus : adj[j]) {
-                int next = bus.first;
-                int time = bus.second;
-                if (dist[j] != LLONG_MAX && dist[next] > dist[j] + time) {
-                    dist[next] = dist[j] + time;
-                    if (i == N) {
-                        negativeCycle = true;
-                    }
+    for (int i = 0; i < n-1; i++) {
+        for (int j = 1; j <= n; j++) {
+            for (auto k : edge[j]) {
+                auto [d, v] = k;
+                if (dist[j] == LLONG_MAX) {
+                    continue;
+                }
+                if (dist[v] > dist[j] + d) {
+                    dist[v] = dist[j] + d;
                 }
             }
         }
     }
 
-    if (negativeCycle) {
-        cout << -1;
-    } else {
-        for (int i = 2; i <= N; i++) {
-            cout << (dist[i] == LLONG_MAX ? -1 : dist[i]) << '\n';
-        }
-    }
+    for (int j = 1; j <= n; j++) {
+            for (auto k : edge[j]) {
+                auto [d, v] = k;
+                if (dist[j] == LLONG_MAX) {
+                    continue;
+                }
+                if (dist[v] > dist[j] + d) {
+                        cout << -1;
+                        return 0;
+                    }
+                }
+            }
+        
 
-    return 0;
+    for (int i = 2; i < n + 1; i++) {
+        cout << (dist[i] == LLONG_MAX ? -1 : dist[i]) << "\n";
+    }
 }
