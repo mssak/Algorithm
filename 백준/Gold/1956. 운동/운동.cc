@@ -14,7 +14,7 @@ int main()
 
     for(int i=0;i<v;i++){
         for(int j=0;j<v;j++){
-            arr[i][j]=INT_MAX;
+            arr[i][j]=1e9;
         }
     }
 
@@ -28,7 +28,7 @@ int main()
     for(int i=0;i<v;i++){
         for(int j=0;j<v;j++){
             for(int k=0;k<v;k++){
-                if(arr[j][i]==INT_MAX||arr[i][k]==INT_MAX||j==i||k==i){
+                if(j==i||k==i){
                     continue;
                 }
                 arr[j][k]=min(arr[j][k],arr[j][i]+arr[i][k]);
@@ -36,10 +36,10 @@ int main()
         }
     }
 
-    int ans=INT_MAX;
+    int ans=1e9;
     for(int i=0;i<v;i++){
         ans=min(ans,arr[i][i]);
     }
 
-    cout<<(ans==INT_MAX?-1:ans);
+    cout<<(ans==1e9?-1:ans);
 }
