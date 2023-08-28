@@ -1,5 +1,4 @@
 #include<bits/stdc++.h>
-#define MAX 
 using namespace std;
 
 int main()
