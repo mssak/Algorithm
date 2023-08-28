@@ -10,7 +10,7 @@ int main()
     int n;
     cin>>n;
 
-    bool dp[1'000'001]={0};
+    vector<bool> dp(n+1);
 
     queue<vector<int>> q;
     q.push({n});
