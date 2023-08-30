@@ -21,8 +21,10 @@ int main() {
     vector<int> idx; // LIS의 원소들의 원래 인덱스를 저장
     vector<int> prev(n, -1); // 각 원소의 이전 원소의 인덱스를 저장
 
-    for(int i=0;i<n;i++){
-        if(LIS.empty() || LIS.back()<arr[i]){
+    LIS.push_back(arr[0]);
+    idx.push_back(0);
+    for(int i=1;i<n;i++){
+        if(LIS.back()<arr[i]){
             LIS.push_back(arr[i]);
             idx.push_back(i);
             if(i>0) prev[i]=idx[LIS.size()-2];
@@ -37,11 +39,10 @@ int main() {
     }
 
     vector<int> ans;
-    int i=idx.back();
-    for(;i!=-1;i=prev[i]){
+    for(int i=idx.back();i!=-1;i=prev[i]){
         ans.push_back(arr[i]);
     }
-
+    
     cout<<LIS.size()<<"\n";
     for(int i=ans.size()-1;i>=0;i--){
         cout<<ans[i]<<" ";
