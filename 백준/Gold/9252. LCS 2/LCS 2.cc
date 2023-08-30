@@ -1,75 +1,53 @@
-#include<bits/stdc++.h>
-#define MAX 1001
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+
 using namespace std;
 
+int dp[1001][1001];
 
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
 
-int main()
-{
-    
-    cin.tie(NULL);
-    ios_base::sync_with_stdio(false);
+    string s1, s2;
+    cin >> s1 >> s2;
 
-    string sa,sb;
-    int la,lb;
-    int prea[MAX][MAX];
-    int preb[MAX][MAX];
-    char cha[MAX][MAX]{0};
-    int len[MAX][MAX]{0};
+    int len1 = s1.size();
+    int len2 = s2.size();
 
-    cin>>sa>>sb;
-    la=sa.size();
-    lb=sb.size();
-
-    for(int i=0;i<=la;i++){
-        for(int j=0;j<=lb;j++){
-            prea[i][j]=-1;
-            preb[i][j]=-1;
-        }
-    }
-
-    for(int i=1;i<=la;i++){
-        for(int j=1;j<=lb;j++){
-            if(sa[i-1]==sb[j-1]){
-                len[i][j]=len[i-1][j-1]+1;
-                prea[i][j]=i-1;
-                preb[i][j]=j-1;
-                cha[i][j]=sa[i-1];
-            }
-            else{
-                if(len[i-1][j]>len[i][j-1]){
-                    len[i][j]=len[i-1][j];
-                    prea[i][j]=i-1;
-                    preb[i][j]=j;
-                }
-                else{
-                    len[i][j]=len[i][j-1];
-                    prea[i][j]=i;
-                    preb[i][j]=j-1;
-                }
+    // DP for LCS
+    for (int i = 1; i <= len1; i++) {
+        for (int j = 1; j <= len2; j++) {
+            if (s1[i - 1] == s2[j - 1]) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            } else {
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
             }
         }
     }
 
+    // print length of LCS
+    cout << dp[len1][len2] << "\n";
 
-    if(len[la][lb]){
-        cout<<len[la][lb]<<"\n";
-        string ans;
-        for(int i=la,j=lb,tmp;i>0||j>0;tmp=i,i=prea[i][j],j=preb[tmp][j]){
-            if(cha[i][j]==0){
-                continue;
-            }
-            else{
-                ans+=cha[i][j];
-            }
-        }
-
-        for(int i=ans.size()-1;i>=0;i--){
-            cout<<ans[i];
+    // traceback for LCS string
+    string result = "";
+    while (len1 > 0 && len2 > 0) {
+        if (dp[len1][len2] == dp[len1 - 1][len2]) {
+            len1--;
+        } else if (dp[len1][len2] == dp[len1][len2 - 1]) {
+            len2--;
+        } else {
+            result = s1[len1 - 1] + result;
+            len1--;
+            len2--;
         }
     }
-    else{
-        cout<<len[la][lb];
+
+    if (!result.empty()) {
+        cout << result << "\n";
     }
-    
+
+    return 0;
 }
