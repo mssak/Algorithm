@@ -7,14 +7,14 @@ int T, A, B;
 char command[MAX];
 int previous[MAX];
 
-pair<int, char> operate(int num, char op) {
+int operate(int num, char op) {
     switch(op) {
-        case 'D': return { (2 * num) % MAX, 'D' };
-        case 'S': return { (num == 0) ? 9999 : num - 1, 'S' };
-        case 'L': return { (num % 1000) * 10 + num / 1000, 'L' };
-        case 'R': return { (num % 10) * 1000 + num / 10, 'R' };
+        case 'D': return (2 * num) % MAX;
+        case 'S': return (num == 0) ? 9999 : num - 1;
+        case 'L': return (num % 1000) * 10 + num / 1000;
+        case 'R': return (num % 10) * 1000 + num / 10;
     }
-    return { -1, '?' }; // Should never reach here
+    return -1; // Should never reach here
 }
 
 string bfs() {
@@ -36,11 +36,11 @@ string bfs() {
         }
 
         for(char op: {'D', 'S', 'L', 'R'}) {
-            pair<int, char> next = operate(cur, op);
-            if(command[next.first] == -1) {
-                q.push(next.first);
-                command[next.first] = next.second;
-                previous[next.first] = cur;
+            int next = operate(cur, op);
+            if(command[next] == -1) {
+                q.push(next);
+                command[next] = op;
+                previous[next] = cur;
             }
         }
     }
