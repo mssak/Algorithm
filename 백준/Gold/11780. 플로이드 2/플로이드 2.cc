@@ -6,15 +6,15 @@ using namespace std;
 int dis[MAX][MAX];
 int pre[MAX][MAX]{0};
 
-void search(int x, int y, vector<int>& dq) {
+void search(int x, int y, vector<int>& v) {
     int next = pre[x][y];
     if (next == 0) {
         return;
     }
 
-    search(x, next, dq);
-    dq.push_back(next);
-    search(next, y, dq);
+    search(x, next, v);
+    v.push_back(next);
+    search(next, y, v);
 }
 
 int main()
@@ -68,13 +68,13 @@ int main()
                 continue;
             }
 
-            vector<int> dq;
-            search(i, j, dq);
-            dq.push_back(j);
+            vector<int> v;
+            search(i, j, v);
+            v.push_back(j);
 
-            cout<<dq.size()+1<<" ";
+            cout<<v.size()+1<<" ";
             cout<<i<<" ";
-            for(int k:dq){
+            for(int k:v){
                 cout<<k<<" ";
             }
             cout<<"\n";
