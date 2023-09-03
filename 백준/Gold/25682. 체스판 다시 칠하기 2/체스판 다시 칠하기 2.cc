@@ -1,47 +1,43 @@
-#include<bits/stdc++.h>
-#define MAX 2001
+#include <iostream>
+#include <algorithm>
+
 using namespace std;
+
+int N, M, K;
+char board[2001][2001];
+
+int psums[2001][2001];
+int max_count = INT32_MIN;
+int min_count = INT32_MAX;
 
 int main()
 {
-    cin.tie(NULL);
-    ios_base::sync_with_stdio(false);
+	ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
 
-    int b[MAX][MAX]{0};
-    int n,m,k;
-    cin>>n>>m>>k;
+	cin >> N >> M >> K;
+	for (int i = 1; i <= N; i++) {
+		for (int j = 1; j <= M; j++) {
+			cin >> board[i][j];
 
-    bool istwo=!(m%2);
-    bool flag=false;
-    for(int i=1;i<=n;i++){
-        for(int j=1;j<=m;j++){
-            char a;
-            cin>>a;
-            b[i][j] = b[i-1][j] + b[i][j-1] - b[i-1][j-1];
+			if ((i + j) % 2 == 0) {
+				psums[i][j] = psums[i - 1][j] + psums[i][j - 1] - psums[i - 1][j - 1] + (board[i][j] == 'B' ? 0 : 1);
+			}
+			else {
+				psums[i][j] = psums[i - 1][j] + psums[i][j - 1] - psums[i - 1][j - 1] + (board[i][j] == 'W' ? 0 : 1);
+			}
+		}
+	}
 
-            if(a=='B'){
-                if(flag){
-                    b[i][j]++;
-                }
-            }else{
-                if(!flag){
-                    b[i][j]++;
-                }
-            }
-            flag=!flag;
-        }
-        if(istwo){
-            flag=!flag;
-        }
-    }
+	for (int y = K; y <= N; y++) {
+		for (int x = K; x <= M; x++) {
+			max_count = max(psums[y][x] - psums[y - K][x] - psums[y][x - K] + psums[y - K][x - K], max_count);
+			min_count = min(psums[y][x] - psums[y - K][x] - psums[y][x - K] + psums[y - K][x - K], min_count);
+		}
+	}
 
-    int ans=1e9;
-    for(int i=0;i<=n-k;i++){
-        for(int j=0;j<=m-k;j++){
-            ans=min(ans,b[i+k][j+k]-b[i+k][j]-b[i][j+k]+b[i][j]);
-            ans=min(ans,k*k-(b[i+k][j+k]-b[i+k][j]-b[i][j+k]+b[i][j]));
-        }
-    }
+	cout<<min(min_count, K * K - max_count);
 
-    cout<<ans;
+	return 0;
 }
