@@ -6,7 +6,7 @@ using namespace std;
 int dis[MAX][MAX];
 int pre[MAX][MAX]{0};
 
-void search(int x, int y, deque<int>& dq) {
+void search(int x, int y, vector<int>& dq) {
     int next = pre[x][y];
     if (next == 0) {
         return;
@@ -68,12 +68,12 @@ int main()
                 continue;
             }
 
-            deque<int> dq;
+            vector<int> dq;
             search(i, j, dq);
-            dq.push_front(i);
             dq.push_back(j);
 
-            cout<<dq.size()<<" ";
+            cout<<dq.size()+1<<" ";
+            cout<<i<<" ";
             for(int k:dq){
                 cout<<k<<" ";
             }
