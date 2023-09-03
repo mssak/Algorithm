@@ -1,113 +1,83 @@
-#include<iostream>
-#include<vector>
- 
-#define endl "\n"
-#define MAX 110
+#include<bits/stdc++.h>
+#define MAX 101
 #define INF 1e9
 using namespace std;
- 
-int N, M;
-int Cost[MAX][MAX];
-int Route[MAX][MAX];
-vector<int> V;
- 
-int Min(int A, int B) { if (A < B) return A; return B; }
- 
-void Input()
+
+int dis[MAX][MAX];
+int pre[MAX][MAX]{0};
+
+void search(int x, int y, deque<int>& dq) {
+    int next = pre[x][y];
+    if (next == 0) {
+        return;
+    }
+
+    search(x, next, dq);
+    dq.push_back(next);
+    search(next, y, dq);
+}
+
+int main()
 {
-    cin >> N >> M;
-    for (int i = 1; i <= N; i++)
-    {
-        for (int j = 1; j <= N; j++)
-        {
-            Cost[i][j] = INF;
+    cin.tie(NULL);
+    ios_base::sync_with_stdio(false);
+
+    
+    for(int i=1;i<MAX;i++){
+        for(int j=1;j<MAX;j++){
+            dis[i][j]=INF;
         }
     }
- 
-    for (int i = 0; i < M; i++)
-    {
-        int a, b, c; 
-        cin >> a >> b >> c;
-        Cost[a][b] = Min(Cost[a][b], c);
+
+    int n,m;
+    cin>>n>>m;
+
+    for(int i=0;i<m;i++){
+        int a,b,c;
+        cin>>a>>b>>c;
+
+        dis[a][b]=min(dis[a][b],c);
     }
-}
- 
-void Floyd_Warshall()
-{
-    for (int k = 1; k <= N; k++)
-    {
-        for (int i = 1; i <= N; i++)
-        {
-            for (int j = 1; j <= N; j++)
-            {
-                if (i == j) continue;
-                if (Cost[i][j] > Cost[i][k] + Cost[k][j])
-                {
-                    Cost[i][j] = Cost[i][k] + Cost[k][j];
-                    Route[i][j] = k;
+
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            for(int k=1;k<=n;k++){
+                if(i==j||i==k||j==k){
+                    continue;
+                }
+                if(dis[j][k]>dis[j][i]+dis[i][k]){
+                    dis[j][k]=dis[j][i]+dis[i][k];
+                    pre[j][k]=i;
                 }
             }
         }
     }
-}
- 
-void Find_Route(int Start, int End)
-{
-    if (Route[Start][End] == 0)
-    {
-        V.push_back(Start);
-        V.push_back(End);
-        return;
-    }
-    Find_Route(Start, Route[Start][End]);
-    V.pop_back();
-    Find_Route(Route[Start][End], End);
-}
- 
-void Solution()
-{
-    Floyd_Warshall();
-    for (int i = 1; i <= N; i++)
-    {
-        for (int j = 1; j <= N; j++)
-        {
-            if (Cost[i][j] == INF) cout << 0 << " ";
-            else cout << Cost[i][j] << " ";
+
+    //출력
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            cout<<(dis[i][j]==INF?0:dis[i][j])<<" ";
         }
-        cout << endl;
+        cout<<"\n";
     }
-    for (int i = 1; i <= N; i++)
-    {
-        for (int j = 1; j <= N; j++)
-        {
-            if (Cost[i][j] == INF) cout << 0;
-            else
-            {
-                V.clear();
-                Find_Route(i, j);
-                cout << V.size() << " ";
-                for (int k = 0; k < V.size(); k++) cout << V[k] << " ";
+
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            if(dis[i][j]==INF){
+                cout<<0<<"\n";
+                continue;
             }
-            cout << endl;
+
+            deque<int> dq;
+            search(i, j, dq);
+            dq.push_front(i);
+            dq.push_back(j);
+
+            cout<<dq.size()<<" ";
+            for(int k:dq){
+                cout<<k<<" ";
+            }
+            cout<<"\n";
         }
     }
-}
- 
-void Solve()
-{
-    Input();
-    Solution();
-}
- 
-int main(void)
-{
-    ios::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
- 
-    //freopen("Input.txt", "r", stdin);
-    Solve();
- 
-    cout<<"two";
-    return 0;
 }
