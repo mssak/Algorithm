@@ -24,13 +24,11 @@ int main()
 		}
 	}
 
-    int s=k*k;
     int ans=1e9;
     for(int i=0;i<=n-k;i++){
         for(int j=0;j<=m-k;j++){
-            int tmp=b[i+k][j+k]-b[i+k][j]-b[i][j+k]+b[i][j];
-            ans=min(ans,tmp);
-            ans=min(ans,s-tmp);
+            ans=min(ans,b[i+k][j+k]-b[i+k][j]-b[i][j+k]+b[i][j]);
+            ans=min(ans,k*k-(b[i+k][j+k]-b[i+k][j]-b[i][j+k]+b[i][j]));
         }
     }
 
