@@ -1,48 +1,38 @@
-#include <iostream>
-#include <vector>
-#include <unordered_map>
-
+#include<bits/stdc++.h>
+#define MAX 100'001
 using namespace std;
+int n;
+int in[MAX];
+int in_index[MAX];
+int post[MAX];
 
-vector<int> inorder, postorder;
-unordered_map<int, int> inorder_idx;
-
-void find_preorder(int in_start, int in_end, int post_start, int post_end) {
-    if (in_start > in_end || post_start > post_end) {
+void f(int s,int e,int p)
+{
+    if(s>e){
         return;
     }
 
-    // 포스트오더의 마지막 원소는 현재 서브트리의 루트
-    int root = postorder[post_end];
-    cout << root << " ";
+    int ri=in_index[post[p]];
+    cout<<in[ri]<<" ";
 
-    int root_idx_inorder = inorder_idx[root];  // 인오더에서의 루트 위치
-    int left_size = root_idx_inorder - in_start;  // 왼쪽 서브트리의 크기
-
-    // 왼쪽 서브트리 탐색
-    find_preorder(in_start, root_idx_inorder-1, post_start, post_start+left_size-1);
-    // 오른쪽 서브트리 탐색
-    find_preorder(root_idx_inorder+1, in_end, post_start+left_size, post_end-1);
+    f(s,ri-1,p-(e-ri+1));
+    f(ri+1,e,p-1);
 }
 
-int main() {
-    int n;
-    cin >> n;
+int main()
+{
+    cin.tie(NULL);
+    ios_base::sync_with_stdio(false);
 
-    inorder.resize(n);
-    postorder.resize(n);
+    cin>>n;
 
-    for (int i = 0; i < n; i++) {
-        cin >> inorder[i];
+    for(int i=0;i<n;i++){
+        cin>>in[i];
+        in_index[in[i]]=i;
     }
-    for (int i = 0; i < n; i++) {
-        cin >> postorder[i];
-    }
-
-    for (int i = 0; i < n; i++) {
-        inorder_idx[inorder[i]] = i;
+    for(int i=0;i<n;i++){
+        cin>>post[i];
     }
 
-    find_preorder(0, n-1, 0, n-1);
-    return 0;
+    f(0,n-1,n-1);
 }
