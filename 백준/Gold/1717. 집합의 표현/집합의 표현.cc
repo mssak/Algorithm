@@ -1,63 +1,51 @@
-#include <iostream>
-#include <vector>
+#include<bits/stdc++.h>
+#define MAX 1'000'000
 using namespace std;
 
-class UnionFind {
-private:
-    vector<int> parent; // 각 노드의 부모 노드 정보를 저장하는 배열
-    vector<int> rank;   // 트리의 높이를 저장하는 배열
+int arr[MAX];
 
-public:
-    UnionFind(int n) {
-        parent.resize(n + 1);
-        rank.resize(n + 1, 0);
-        for (int i = 0; i <= n; i++) {
-            parent[i] = i;
-        }
+int f(int a)
+{
+    if(a==arr[a]){
+        return a;
     }
+    return f(arr[a]);
+}
 
-    int find(int u) {
-        if (u == parent[u]) {
-            return u;
-        }
-        return parent[u] = find(parent[u]);
-    }
-
-    void merge(int u, int v) {
-        u = find(u);
-        v = find(v);
-
-        if (u == v) return; // 이미 같은 집합
-
-        // 랭크가 높은 트리에 낮은 트리를 합침
-        if (rank[u] > rank[v]) swap(u, v);
-
-        parent[u] = v;
-        if (rank[u] == rank[v]) rank[v]++;
-    }
-};
-
-int main() {
-    ios_base::sync_with_stdio(false);
+int main()
+{
     cin.tie(NULL);
+    ios_base::sync_with_stdio(false);
 
-    int N, M, c, a, b;
-    cin >> N >> M;
+    int n,m;
+    cin>>n>>m;
 
-    UnionFind uf(N);
+    for(int i=0;i<=n;i++){
+        arr[i]=i;
+    }
 
-    for (int i = 0; i < M; i++) {
-        cin >> c >> a >> b;
-        if (c == 0) {
-            uf.merge(a, b);
-        } else {
-            if (uf.find(a) == uf.find(b)) {
-                cout << "YES\n";
-            } else {
-                cout << "NO\n";
+    for(int i=0;i<m;i++){
+        int a,b,c;
+        cin>>a>>b>>c;
+
+        if(a==0){
+            int br=f(b);
+            int cr=f(c);
+
+            if(br>cr){
+                arr[cr]=br;
+            }
+            else{
+                arr[br]=cr;
+            }
+        }
+        else{
+            if(f(b)==f(c)){
+                cout<<"yes\n";
+            }
+            else{
+                cout<<"no\n";
             }
         }
     }
-
-    return 0;
 }
