@@ -3,6 +3,14 @@ using namespace std;
 
 int uf[10'001];
 
+struct Edge{
+    int a,b,c;
+    bool operator<(const Edge right)const{
+        if(c<right.c) return true;
+        else return false;
+    }
+};
+
 int find(int a)
 {
     if(a==uf[a]){
@@ -23,19 +31,19 @@ int main()
         uf[i]=i;
     }
 
-    tuple<int,int,int> edge[100'000];
+    Edge edge[100'000];
     for(int i=0;i<e;i++){
         int a,b,c;
         cin>>a>>b>>c;
 
-        edge[i]={c,a,b};
+        edge[i]={a,b,c};
     }
     sort(edge,edge+e);
 
     int cnt=0;
     int ans=0;
     for(int i=0;cnt!=v-1;i++){
-        auto[c,a,b] = edge[i];
+        auto[a,b,c] = edge[i];
         int ar=find(a);
         int br=find(b);
 
