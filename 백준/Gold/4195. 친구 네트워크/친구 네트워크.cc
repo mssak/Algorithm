@@ -24,7 +24,7 @@ int main()
 
     while(T--){
         cin>>f;
-        for(int i=0;i<f*2;i++){
+        for(int i=0;i<MAX;i++){
             uf[i]=i;
             siz[i]=1;
         }
@@ -46,12 +46,19 @@ int main()
             int ar=find(ai);
             int br=find(bi);
 
-            if(ar!=br){
+            if(ar>br){
                 uf[ar]=br;
                 siz[br]+=siz[ar];
+                cout<<siz[br]<<"\n";
             }
-
-            cout<<siz[br]<<"\n";
+            else if(br>ar){
+                uf[br]=ar;
+                siz[ar]+=siz[br];
+                cout<<siz[ar]<<"\n";
+            }
+            else{
+                cout<<siz[br]<<"\n";
+            }
         }
     }
 }
