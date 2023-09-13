@@ -24,7 +24,7 @@ int main()
 
     while(T--){
         cin>>f;
-        for(int i=0;i<MAX;i++){
+        for(int i=0;i<f*2;i++){
             uf[i]=i;
             siz[i]=1;
         }
