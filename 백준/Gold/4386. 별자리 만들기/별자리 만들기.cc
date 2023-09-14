@@ -1,57 +1,50 @@
-#include<bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <queue>
 #define MAX 100
 using namespace std;
 
-int uf[MAX];
+int n;
+pair<double, double> stars[MAX];
+bool visited[MAX];
 
-int find(int a)
-{
-    if(uf[a]==a){
-        return a;
-    }
-    else return find(uf[a]);
+double getDistance(pair<double, double> a, pair<double, double> b) {
+    return sqrt((a.first - b.first) * (a.first - b.first) + (a.second - b.second) * (a.second - b.second));
 }
 
-int main()
-{
-    cin.tie(NULL);
-    ios_base::sync_with_stdio(false);
+double prim() {
+    priority_queue<pair<double, int>, vector<pair<double, int>>, greater<pair<double, int>>> pq;
+    double result = 0;
+    pq.push({0, 0});
 
-    int n;
-    cin>>n;
+    while(!pq.empty()) {
+        double cost = pq.top().first;
+        int curr = pq.top().second;
+        pq.pop();
 
-    double pos[MAX][2];
-    vector<tuple<double,int,int>> dist;
+        if(visited[curr]) continue;
 
-    for(int i=0;i<n;i++){
-        cin>>pos[i][0]>>pos[i][1];
-    }
+        visited[curr] = true;
+        result += cost;
 
-    for(int i=0;i<n;i++){
-        uf[i]=i;
-    }
-
-    for(int i=0;i<n;i++){
-        for(int j=0;j<i;j++){
-            dist.emplace_back(pow(pow(pos[i][0]-pos[j][0],2)+pow(pos[i][1]-pos[j][1],2),0.5),i,j);
+        for(int i = 0; i < n; i++) {
+            if(!visited[i]) {
+                double distance = getDistance(stars[curr], stars[i]);
+                pq.push({distance, i});
+            }
         }
     }
-    
-    sort(dist.begin(),dist.end());
+    return result;
+}
 
-    int cnt{0};
-    double ans{0};
-    for(int i=0;cnt!=n-1;i++){
-        auto [d,a,b]=dist[i];
-        int ar=find(a);
-        int br=find(b);
-
-        if(uf[ar]!=uf[br]){
-            uf[ar]=br;
-            ans+=d;
-            cnt++;
-        }
+int main() {
+    cin >> n;
+    for(int i = 0; i < n; i++) {
+        cin >> stars[i].first >> stars[i].second;
     }
 
-    printf("%.2f",ans);
+    cout.precision(2);
+    cout << fixed << prim() << endl;
+    return 0;
 }
