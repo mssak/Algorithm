@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include <vector>
 #include <cmath>
 #include <queue>
@@ -7,37 +8,34 @@
 using namespace std;
 
 typedef pair<int, int> pii;
-
-struct Edge {
-    int from, to;
-    double weight;
-
-    bool operator<(const Edge &other) const {
-        return weight > other.weight; // 우선순위 큐를 위해 큰 것부터 pop되게 함
-    }
-};
+typedef pair<double, int> pdi; // 우선순위 큐를 위한 타입 (거리, 인덱스)
 
 double getDistance(const pii &a, const pii &b) {
     return sqrt(pow(a.first - b.first, 2) + pow(a.second - b.second, 2));
 }
 
-double prim(int N, vector<vector<Edge>>& adj) {
+double prim(int N, const vector<pii>& coords, const vector<vector<int>>& connected) {
     vector<bool> visited(N, false);
-    priority_queue<Edge> pq;
-    pq.push({0, 0, 0.0});
+    priority_queue<pdi, vector<pdi>, greater<pdi>> pq; // 거리가 작은 것부터 pop 되도록 설정
+    pq.push({0.0, 0}); // 시작점
     double answer = 0.0;
 
     while (!pq.empty()) {
-        Edge cur = pq.top();
+        double dist = pq.top().first;
+        int cur = pq.top().second;
         pq.pop();
 
-        if (visited[cur.to]) continue;
-        visited[cur.to] = true;
-        answer += cur.weight;
+        if (visited[cur]) continue;
+        visited[cur] = true;
+        answer += dist;
 
-        for (Edge next : adj[cur.to]) {
-            if (!visited[next.to]) {
-                pq.push(next);
+        for (int i = 0; i < N; i++) {
+            if (!visited[i]) {
+                if (find(connected[cur].begin(), connected[cur].end(), i) != connected[cur].end()) {
+                    pq.push({0.0, i}); // 이미 연결된 통로
+                } else {
+                    pq.push({getDistance(coords[cur], coords[i]), i});
+                }
             }
         }
     }
@@ -54,24 +52,16 @@ int main() {
         cin >> coords[i].first >> coords[i].second;
     }
 
-    vector<vector<Edge>> adj(N);
-    for (int i = 0; i < N; i++) {
-        for (int j = i + 1; j < N; j++) {
-            double dist = getDistance(coords[i], coords[j]);
-            adj[i].push_back({i, j, dist});
-            adj[j].push_back({j, i, dist});
-        }
-    }
-
-    while (M--) {
+    vector<vector<int>> connected(N);
+    for (int i = 0; i < M; i++) {
         int a, b;
         cin >> a >> b;
         a--; b--;
-        adj[a].push_back({a, b, 0.0});
-        adj[b].push_back({b, a, 0.0});
+        connected[a].push_back(b);
+        connected[b].push_back(a);
     }
 
-    cout << fixed << setprecision(2) << prim(N, adj) << "\n";
+    cout << fixed << setprecision(2) << prim(N, coords, connected) << "\n";
 
     return 0;
 }
