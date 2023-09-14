@@ -4,11 +4,11 @@ using namespace std;
 using dii=tuple<double,int,int>;
 
 int uf[MAX];
-int pos[MAX][2];
+double pos[MAX][2];
 vector<dii> edge;
 
 double getd(int i,int j) {
-    return pow(pow(pos[i][0]-pos[j][0],2)+pow(pos[i][1]-pos[j][1],2),0.5);
+    return sqrt((pos[i][0] - pos[j][0]) * (pos[i][0] - pos[j][0]) + (pos[i][1] - pos[j][1]) * (pos[i][1] - pos[j][1]));
 }
 
 int f(int a) {
@@ -22,7 +22,7 @@ int main() {
     cin.tie(NULL);
     ios_base::sync_with_stdio(false);
 
-    int n,m;
+    int n,m,cnt{0};
     cin>>n>>m;
 
     for(int i=0;i<n;i++){
@@ -37,7 +37,10 @@ int main() {
         int ar=f(a);
         int br=f(b);
 
-        uf[ar]=br;
+        if(ar!=br){
+            uf[ar]=br;
+            cnt++;
+        }
     }
 
     for(int i=0;i<n;i++){
@@ -55,6 +58,10 @@ int main() {
         if(ar!=br){
             ans+=d;
             uf[ar]=br;
+            cnt++;
+        }
+        if(cnt==n-1){
+            break;
         }
     }
 
