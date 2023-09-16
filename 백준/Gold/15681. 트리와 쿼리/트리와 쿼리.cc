@@ -4,20 +4,18 @@ using namespace std;
 
 vector<int> tree[MAX];
 int sub[MAX]{0};
-int par[MAX]{0};
 
 int dfs(int r)
 {
-    int c{1};
+    sub[r]=1;
 
     for(int i:tree[r]){
-        if(i!=par[r]){
-            par[i]=r;
-            c+=dfs(i);
+        if(!sub[i]){
+            sub[r]+=dfs(i);
         }
     }
 
-    return sub[r]=c;
+    return sub[r];
 }
 
 int main()
@@ -36,7 +34,6 @@ int main()
         tree[b].push_back(a);
     }
 
-    par[r]=-1;
     dfs(r);
 
     for(int i=0;i<q;i++){
