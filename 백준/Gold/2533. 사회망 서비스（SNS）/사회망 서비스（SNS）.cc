@@ -2,7 +2,6 @@
 #define MAX 1'000'001
 using namespace std;
 
-int node[MAX];
 vector<int> edge[MAX];
 int dp[MAX][2];
 bool v[MAX]{0};
