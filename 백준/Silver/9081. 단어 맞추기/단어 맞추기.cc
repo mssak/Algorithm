@@ -12,12 +12,9 @@ int main()
     while(N--){
         string s;
         cin>>s;
-        string ans{s};
-        if(next_permutation(s.begin(),s.end())){
-            cout<<s<<"\n";
+        if(!next_permutation(s.begin(),s.end())){
+            prev_permutation(s.begin(),s.end());
         }
-        else{
-            cout<<ans<<"\n";
-        }
+        cout<<s<<"\n";
     }
 }
