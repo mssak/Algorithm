@@ -1,73 +1,59 @@
-#include<bits/stdc++.h>
-#define MAX 102
+#include <iostream>
+#include <queue>
+#include <tuple>
 using namespace std;
 
-int main()
-{
-    cin.tie(NULL);
-    ios_base::sync_with_stdio(false);
+int W, H;
+string board[101];
+int visited[101][101];
+int dr[4] = {-1, 0, 1, 0};
+int dc[4] = {0, 1, 0, -1};
 
-    int map[MAX][MAX][4];
-    int w,h;
-    vector<pair<int,int>> v;
-    cin>>h>>w;
+void bfs(int nowr, int nowc){
+    queue<tuple<int, int, int>> q;
+    q.push({nowr, nowc, -1});
+    visited[nowr][nowc] = 0;
 
-    for(int i=0;i<w+2;i++){
-        for(int j=0;j<h+2;j++){
-            for(int k=0;k<4;k++){
-                map[i][j][k]=-1;
-            }
-        }
-    }
-
-    for(int i=1;i<=w;i++){
-        for(int j=1;j<=h;j++){
-            char c;
-            cin>>c;
-            int t;
-            if(c=='.'){
-                t=1e9;
-            }
-            else if(c=='C'){
-                v.push_back({i,j});
-                t=1e9;
-            }
-            else if(c=='*'){
-                t=-1;
-            }
-            
-            for(int k=0;k<4;k++){
-                map[i][j][k]=t;
-            }
-        }
-    }
-
-    queue<tuple<int,int,int,int>> q;
-    q.push({v[0].first,v[0].second,0,0});
-    q.push({v[0].first,v[0].second,0,1});
-    q.push({v[0].first,v[0].second,0,2});
-    q.push({v[0].first,v[0].second,0,3});
-
-    int dir[4][2]={{0,-1},{1,0},{0,1},{-1,0}};
-    while(q.size()){
-        auto[ci,cj,cc,cd]=q.front();
+    while(!q.empty()){
+        int r, c, cnt;
+        tie(r, c, cnt) = q.front();
         q.pop();
-        if(map[ci][cj][cd]==-1){
-            continue;
-        }
-        for(int i=0;i<4;i++){
-            int ni=ci+dir[i][0];
-            int nj=cj+dir[i][1];
-            int nc=cc;
-            if(i!=cd){
-                nc++;
+        cnt++;
+
+        for(int i = 0; i < 4; i++){
+            int nr = r + dr[i];
+            int nc = c + dc[i];
+            while (0 <= nr && nr < H && 0 <= nc && nc < W && board[nr][nc] != '*' && cnt <= visited[nr][nc]){
+                if(board[nr][nc] == 'C'){
+                    cout << cnt;
+                    return;
+                }
+                if(cnt < visited[nr][nc]){
+                    visited[nr][nc] = cnt;
+                    q.push({nr, nc, cnt});
+                }
+                nr += dr[i];
+                nc += dc[i];
             }
-            if(map[ni][nj][i]>nc){
-                map[ni][nj][i]=nc;
-                q.push({ni,nj,nc,i});
+        }
+    }
+}
+
+int main(){
+    cin >> W >> H;
+
+    int r, c;
+    for(int i = 0; i < H; i++){
+        cin >> board[i];
+        for(int j = 0; j < W; j++){
+            visited[i][j] = 987654321;
+            if(board[i][j] == 'C'){
+                r = i;
+                c = j;
             }
         }
     }
 
-    cout<<*min_element(map[v[1].first][v[1].second],map[v[1].first][v[1].second]+4);
+    bfs(r, c);
+    return 0;
 }
