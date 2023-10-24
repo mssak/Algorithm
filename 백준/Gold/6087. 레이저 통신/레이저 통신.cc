@@ -55,15 +55,15 @@ int main()
         if(map[ci][cj][cd]==-1){
             continue;
         }
-        if(map[ci][cj][cd]>cc){
-            map[ci][cj][cd]=cc;
-            for(int i=0;i<4;i++){
-                int ni=ci+dir[i][0];
-                int nj=cj+dir[i][1];
-                int nc=cc;
-                if(i!=cd){
-                    nc++;
-                }
+        for(int i=0;i<4;i++){
+            int ni=ci+dir[i][0];
+            int nj=cj+dir[i][1];
+            int nc=cc;
+            if(i!=cd){
+                nc++;
+            }
+            if(map[ni][nj][i]>nc){
+                map[ni][nj][i]=nc;
                 q.push({ni,nj,nc,i});
             }
         }
