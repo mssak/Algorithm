@@ -17,10 +17,10 @@ int main()
         v.push_back(a);
     }
 
-    if(equal(v.begin(),v.end(),asc.begin())){
+    if(v==asc){
         cout<<"ascending";
     }
-    else if(equal(v.begin(),v.end(),des.begin())){
+    else if(v==des){
         cout<<"descending";
     }
     else{
