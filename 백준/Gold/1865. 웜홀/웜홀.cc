@@ -1,72 +1,69 @@
-#include <iostream>
-#include <vector>
-
+#include<bits/stdc++.h>
+#define MAX 500
 using namespace std;
+using pii=pair<int,int>;
 
-const int INF = 1e9;
-
-int main() {
+int main()
+{
+    cin.tie(NULL);
     ios_base::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
 
-    int TC;
-    cin >> TC;
+    int T;
+    cin>>T;
 
-    while (TC--) {
-        int N, M, W;
-        cin >> N >> M >> W;
-
-        vector<vector<int>> dist(N + 1, vector<int>(N + 1, INF));
-
-        for (int i = 1; i <= N; i++) {
-            dist[i][i] = 0;
+    while(T--){
+        vector<pair<int,int>> edge[MAX];
+        int N,M,W;
+        cin>>N>>M>>W;
+        
+        for(int i=0;i<M;i++){
+            int s,e,t;
+            cin>>s>>e>>t;
+            s--;e--;
+            edge[s].push_back({e,t});
+			edge[e].push_back({s,t});
+        }
+        for(int i=0;i<W;i++){
+            int s,e,t;
+            cin>>s>>e>>t;
+            s--;e--;
+            edge[s].push_back({e,-t});
         }
 
-        // 도로 정보 입력
-        for (int i = 0; i < M; i++) {
-            int S, E, T;
-            cin >> S >> E >> T;
-            if(T < dist[S][E]) { // 더 작은 값으로 갱신
-                dist[S][E] = T;
-                dist[E][S] = T;
-            }
-        }
+		int v[MAX];
+		memset(v,0x3f,sizeof(v));
+		v[0]=0;
 
-        // 웜홀 정보 입력
-        for (int i = 0; i < W; i++) {
-            int S, E, T;
-            cin >> S >> E >> T;
-            if(-T < dist[S][E]) { // 더 작은 값으로 갱신
-                dist[S][E] = -T;
-            }
-        }
+		for(int i=0;i<N;i++){
+			for(int s=0;s<N;s++){
+				for(auto k:edge[s]){
+					auto [e,t]=k;
+					if(v[e]>v[s]+t){
+						v[e]=v[s]+t;
+					}
+				}
+			}
+		}
 
-        // 플로이드 워셜 알고리즘
-        for (int k = 1; k <= N; k++) {
-            for (int i = 1; i <= N; i++) {
-                for (int j = 1; j <= N; j++) {
-                    if (dist[i][j] > dist[i][k] + dist[k][j]) {
-                        dist[i][j] = dist[i][k] + dist[k][j];
-                    }
-                }
-            }
-        }
+		bool ans=false;
+		for(int s=0;s<N;s++){
+			if(ans){
+				break;
+			}
+			for(auto k:edge[s]){
+				auto [e,t]=k;
+				if(v[e]>v[s]+t){
+					ans=true;
+					break;
+				}
+			}
+		}
 
-        bool timeTravel = false;
-        for (int i = 1; i <= N; i++) {
-            if (dist[i][i] < 0) {
-                timeTravel = true;
-                break;
-            }
-        }
-
-        if (timeTravel) {
-            cout << "YES\n";
-        } else {
-            cout << "NO\n";
-        }
-    }
-
-    return 0;
+		if(ans){
+			cout<<"YES\n";
+		}
+		else{
+			cout<<"NO\n";
+		}
+	}
 }
