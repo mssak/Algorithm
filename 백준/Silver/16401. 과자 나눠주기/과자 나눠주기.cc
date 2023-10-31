@@ -1,7 +1,6 @@
 #include<bits/stdc++.h>
 #define MAX 1'000'001
 using namespace std;
-using ll=long long;
 
 int main()
 {
@@ -11,17 +10,18 @@ int main()
     int n,m;
     cin>>n>>m;
 
-    ll arr[MAX];
+    int arr[MAX];
+    int e=-1;
     for(int i=0;i<m;i++){
         cin>>arr[i];
+        e=max(e,arr[i]);
     }
 
-    ll s=1;
-    ll e=1'000'000'000;
-    ll ans=0;
-    while(s<e){
-        ll md=(s+e)/2;
-        ll cnt=0;
+    int s=1;
+    int ans=0;
+    while(s<=e){
+        int md=(s+e)/2;
+        int cnt=0;
         for(int i=0;i<m;i++){
             cnt+=arr[i]/md;
         }
@@ -30,7 +30,7 @@ int main()
             ans=md;
         }
         else{
-            e=md;
+            e=md-1;
         }
     }
     cout<<ans;
