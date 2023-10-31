@@ -17,7 +17,7 @@ int main()
     }
 
     ll s=1;
-    ll e=1'000'000'001;
+    ll e=1'000'000'000;
     ll ans=0;
     while(s<e){
         ll md=(s+e)/2;
