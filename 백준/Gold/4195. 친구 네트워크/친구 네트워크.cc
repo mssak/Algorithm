@@ -2,58 +2,56 @@
 #define MAX 200'000
 using namespace std;
 
-int f;
 int uf[MAX];
-int siz[MAX];
+int sz[MAX];
 
-int find(int a)
-{
-    if(a==uf[a]){
-        return a;
+int f(int a){
+    if(uf[a]!=a){
+        uf[a]=f(uf[a]);
     }
-    return uf[a]=find(uf[a]);
+    return uf[a];
 }
 
 int main()
 {
-    cin.tie(NULL);
+    cin.tie(0);
     ios_base::sync_with_stdio(false);
-
+    
     int T;
     cin>>T;
-
+    
     while(T--){
-        cin>>f;
+        int n;
+        cin>>n;
         for(int i=0;i<MAX;i++){
             uf[i]=i;
-            siz[i]=1;
+            sz[i]=1;
         }
-
-        unordered_map<string,int> m;
-        for(int i=0;i<f;i++){
-            string a,b;
-            cin>>a>>b;
-            if(m.find(a)==m.end()){
-                m[a]=m.size();
-            }
-            if(m.find(b)==m.end()){
-                m[b]=m.size();
-            }
-
-            int ai=m[a];
-            int bi=m[b];
-
-            int ar=find(ai);
-            int br=find(bi);
-
-            if(ar!=br){
-                uf[ar]=br;
-                siz[br]+=siz[ar];
-                cout<<siz[br]<<"\n";
-            }
-            else{
-                cout<<siz[br]<<"\n";
-            }
+        unordered_map<string,int> um;
+        
+        for(int i=0;i<n;i++){
+            
+   
+        string as,bs;
+        cin>>as>>bs;
+        if(um.find(as)==um.end()){
+            um[as]=um.size();   
+        }
+        int ai=um[as];
+        if(um.find(bs)==um.end()){
+            um[bs]=um.size();   
+        }
+        int bi=um[bs];
+        ai=f(ai);
+        bi=f(bi);
+        if(ai!=bi){
+            uf[ai]=bi;
+            sz[bi]+=sz[ai];
+            cout<<sz[bi]<<"\n";
+        }
+        else{
+            cout<<sz[bi]<<"\n";
+        }
         }
     }
 }
