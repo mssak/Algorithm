@@ -11,7 +11,7 @@ int find(int a)
     if(a==uf[a]){
         return a;
     }
-    return find(uf[a]);
+    return uf[a]=find(uf[a]);
 }
 
 int main()
@@ -46,15 +46,10 @@ int main()
             int ar=find(ai);
             int br=find(bi);
 
-            if(ar>br){
+            if(ar!=br){
                 uf[ar]=br;
                 siz[br]+=siz[ar];
                 cout<<siz[br]<<"\n";
-            }
-            else if(br>ar){
-                uf[br]=ar;
-                siz[ar]+=siz[br];
-                cout<<siz[ar]<<"\n";
             }
             else{
                 cout<<siz[br]<<"\n";
