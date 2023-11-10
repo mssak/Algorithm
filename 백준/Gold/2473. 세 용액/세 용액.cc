@@ -16,7 +16,7 @@ int main()
     }
 
     long long ans[3];
-    long long mn=LLONG_MAX;
+    long long mn=1e18;
     sort(arr,arr+n);
     for(long long i=0;i<n;i++){
         long long s=i+1;
