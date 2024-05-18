@@ -11,10 +11,15 @@ int main()
     string s;
     cin>>n>>s;
 
-    long long a=0;
+    ll ans=0;
     for(int i=0;i<n;i++){
-        a+=(s[i]-'a'+1)*pow(31,i);
-        a%=1234567891;
+        ll t=s[i]-'a'+1;
+        for(int j=0;j<i;j++){
+            t*=31;
+            t%=1234567891;
+        }
+        ans+=t;
+        ans%=1234567891;
     }
-    cout<<a;
+    cout<<ans;
 }
