@@ -9,11 +9,7 @@ int f(int n){
         return arr[n];
     }
 
-    int ans=0;
-    for(int i=1;i<=3;i++){
-        ans+=f(n-i);
-    }
-    return arr[n]=ans;
+    return arr[n] = f(n-1) + f(n-2) + f(n-3);
 }
 
 int main()
