@@ -7,10 +7,10 @@ int main()
     cin.tie(NULL);
     ios_base::sync_with_stdio(false);
 
-    long long n;
+    int n;
     cin>>n;
 
-    long long arr[1001];
+    int arr[1001];
     arr[1]=1;
     arr[2]=3;
 
