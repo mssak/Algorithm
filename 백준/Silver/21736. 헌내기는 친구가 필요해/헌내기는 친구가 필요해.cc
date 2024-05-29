@@ -35,11 +35,7 @@ int main()
         auto [cy,cx]=q.front();
         q.pop();
 
-        if(v[cy][cx]){
-            continue;
-        }
-
-        v[cy][cx]=true;
+        
         if(arr[cy][cx]=='P'){
             ans++;
         }
@@ -49,7 +45,7 @@ int main()
             int nx=cx+dir[i].second;
 
             if(ny>=0 && ny<n && nx>=0 && nx<m && v[ny][nx]==false && arr[ny][nx]!='X'){
-                
+                v[ny][nx]=true;
                 q.push({ny,nx});
             }
         }
