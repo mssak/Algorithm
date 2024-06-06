@@ -7,31 +7,19 @@ int main()
     cin.tie(NULL);
     ios_base::sync_with_stdio(false);
 
-    int ans[10];
-    memset(ans,0,sizeof(ans));
+    int ans[10]{0};
 
     int n;
     cin>>n;
-    int arr[10];
     for(int i=0;i<n;i++){
-        cin>>arr[i];
-    }
-
-
-    for(int i=0;i<n;i++){
-        int ix=0;
-        while(ans[ix]){
-            ix++;
-            arr[i]++;
-        }
-        while(ix!=arr[i]){
-            ix++;
-            while(ans[ix]){
-                ix++;
-                arr[i]++;
+        int k;
+        cin>>k;
+        for(int j=0;j<=k;j++){
+            if(ans[j]){
+                k++;
             }
         }
-        ans[ix]=i+1;
+        ans[k]=i+1;
     }
 
     for(int i=0;i<n;i++){
