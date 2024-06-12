@@ -9,32 +9,33 @@ int main()
 
   int n,m;
   cin>>n>>m;
-	int arr[1001];
+	int house[1001];
 
 	for(int i=1;i<=n;i++){
-		cin>>arr[i];
+		cin>>house[i];
 	}
 	
-	unordered_set<int> us;
+	bool rained[1001]{0};
 	for(int i=1;i<=m;i++){
 		int a,b;
 		cin>>a>>b;
 		
 		for(int j=a;j<=b;j++){
-			us.insert(j);
-			arr[j]++;
+			rained[j]=1;
+			house[j]++;
 		}
 		
 		if(i%3==0){
-			while(us.size()){
-				auto it=us.begin();
-				arr[*it]--;
-				it=us.erase(it);
+			for(int j=1;j<=n;j++){
+				if(rained[j]){
+					house[j]--;
+					rained[j]=0;
+				}
 			}
 		}
 	}
 	
 	for(int i=1;i<=n;i++){
-		cout<<arr[i]<<" ";
+		cout<<house[i]<<" ";
 	}
 }
