@@ -1,4 +1,4 @@
-# 알고리즘 공부 기록용 코드 레파지토리
+# 알고리즘 공부
 ## 백준
 ### cpp:  
 [![Solved.ac Profile](http://mazassumnida.wtf/api/v2/generate_badge?boj=minbud)](https://solved.ac/minbud/)
