@@ -26,17 +26,21 @@ int main()
         g[u].push_back({w,v});
     }
     
-    priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>> q;
-    q.push({0,k});
+    set<pair<int,int>> q;
+    q.insert({0,k});
 
     while(!q.empty()){
-        pair<int,int> c=q.top();
+        pair<int,int> c=*q.begin();
+        q.erase(q.begin());
+
+        if(c.first>dist[c.second]){
+            continue;
+        }
         
-        q.pop();
         for(auto i:g[c.second]){
             if(dist[c.second]+i.first<dist[i.second]){
                 dist[i.second]=dist[c.second]+i.first;
-                q.push({dist[i.second],i.second});
+                q.insert({dist[i.second],i.second});
             }
         }
     }
