@@ -13,21 +13,13 @@ int f(int ix)
         return dp[ix];
     }
 
-    vector<int> cv;
+    dp[ix] = 1;
 
     for (int i : v[ix])
     {
-        cv.push_back(f(i) + 1);
+        dp[ix] = max(dp[ix], (f(i) + 1));
     }
 
-    if (cv.empty())
-    {
-        dp[ix] = 1;
-    }
-    else
-    {
-        dp[ix] = *max_element(cv.begin(), cv.end());
-    }
     return dp[ix];
 }
 
