@@ -1,77 +1,92 @@
-#include <bits/stdc++.h>
+#include <string>
+#include <vector>
+#include <queue>
 
 using namespace std;
 
 int solution(vector<string> storage, vector<string> requests) {
-    int n = storage.size();        // 세로 크기
-    int m = storage[0].size();     // 가로 크기
-
-    // 요청을 순서대로 처리합니다.
-    for (const auto &req : requests) {
-        char c = req[0]; // 요청 컨테이너 종류
-        
-        // 크레인 요청: 모든 해당 컨테이너 제거
+    int n = storage.size();
+    int m = storage[0].size();
+    
+    // 4방향 이동을 위한 배열
+    int dirs[4][2] = { {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
+    
+    // 요청을 순서대로 처리
+    for (auto &req : requests) {
+        char target = req[0];
+        // 크레인을 사용하는 경우 (요청 문자열 길이 == 2)
         if (req.size() == 2) {
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < m; j++) {
-                    if (storage[i][j] == c) {
-                        storage[i][j] = ' ';
-                    }
+                    if (storage[i][j] == target)
+                        storage[i][j] = '.';
                 }
             }
         }
-        // 지게차 요청: 요청 당시 외부와 연결된 컨테이너만 제거
+        // 지게차를 사용하는 경우 (요청 문자열 길이 == 1)
         else {
-            // 패딩을 추가한 grid 생성 (크기: (n+2) x (m+2))
-            vector<string> pad(n + 2, string(m + 2, ' '));
+            // 창고 외부와 연결된 빈 칸을 찾기 위한 BFS
+            vector<vector<bool>> exterior(n, vector<bool>(m, false));
+            queue<pair<int, int>> q;
+            // 경계에 위치한 빈 칸을 시작점으로 등록
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < m; j++) {
-                    pad[i + 1][j + 1] = storage[i][j];
+                    if (storage[i][j] == '.' && (i == 0 || i == n - 1 || j == 0 || j == m - 1)) {
+                        exterior[i][j] = true;
+                        q.push({i, j});
+                    }
                 }
             }
-            
-            // 외부(패딩판의 경계)에서부터 빈 칸(' ')만을 따라 BFS 진행
-            vector<vector<bool>> visited(n + 2, vector<bool>(m + 2, false));
-            queue<pair<int, int>> q;
-            q.push({0, 0});
-            visited[0][0] = true;
-            int dy[4] = {-1, 1, 0, 0};
-            int dx[4] = {0, 0, -1, 1};
-            
+            // BFS를 통해 외부와 연결된 빈 칸을 전파
             while (!q.empty()) {
-                auto [y, x] = q.front();
+                auto [ci, cj] = q.front();
                 q.pop();
-                for (int k = 0; k < 4; k++) {
-                    int ny = y + dy[k], nx = x + dx[k];
-                    if (ny < 0 || ny >= n + 2 || nx < 0 || nx >= m + 2) continue;
-                    if (visited[ny][nx]) continue;
-                    // 오직 빈 칸인 경우만 이동합니다.
-                    if (pad[ny][nx] == ' ') {
-                        visited[ny][nx] = true;
-                        q.push({ny, nx});
+                for (int d = 0; d < 4; d++) {
+                    int ni = ci + dirs[d][0];
+                    int nj = cj + dirs[d][1];
+                    if (ni < 0 || ni >= n || nj < 0 || nj >= m) continue;
+                    if (storage[ni][nj] != '.') continue;
+                    if (!exterior[ni][nj]) {
+                        exterior[ni][nj] = true;
+                        q.push({ni, nj});
                     }
                 }
             }
             
-            // 패딩판 내부(원래 storage에 해당)에서 컨테이너 c의 4방향 중 하나라도
-            // 외부와 연결된(visited가 true인) 빈 칸과 인접하면 제거합니다.
-            for (int i = 1; i <= n; i++) {
-                for (int j = 1; j <= m; j++) {
-                    if (pad[i][j] == c) {
-                        if (visited[i - 1][j] || visited[i + 1][j] || visited[i][j - 1] || visited[i][j + 1]) {
-                            storage[i - 1][j - 1] = ' ';
+            // 요청된 컨테이너 중 접근 가능한 컨테이너 제거
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < m; j++) {
+                    if (storage[i][j] == target) {
+                        bool accessible = false;
+                        // 경계에 위치하면 바로 접근 가능
+                        if (i == 0 || i == n - 1 || j == 0 || j == m - 1)
+                            accessible = true;
+                        else {
+                            // 인접한 4방향 중 빈 칸이 외부와 연결되어 있는지 확인
+                            for (int d = 0; d < 4; d++) {
+                                int ni = i + dirs[d][0];
+                                int nj = j + dirs[d][1];
+                                if (ni < 0 || ni >= n || nj < 0 || nj >= m) continue;
+                                if (storage[ni][nj] == '.' && exterior[ni][nj]) {
+                                    accessible = true;
+                                    break;
+                                }
+                            }
                         }
+                        if (accessible)
+                            storage[i][j] = '.';
                     }
                 }
             }
         }
     }
     
-    // 모든 요청 처리 후 남은 컨테이너(빈 칸이 아닌)의 개수를 셉니다.
+    // 모든 요청 처리 후 남은 컨테이너 개수 계산
     int answer = 0;
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
-            if (storage[i][j] != ' ') answer++;
+            if (storage[i][j] != '.')
+                answer++;
         }
     }
     
