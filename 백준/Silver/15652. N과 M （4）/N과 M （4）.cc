@@ -1,35 +1,35 @@
-#include<bits/stdc++.h>
-
+#include <bits/stdc++.h>
 using namespace std;
+using ll = long long;
 
-int ans[9]={};
-int n,m;
+int n, m;
+vector<int> arr;
 
-void f(int a,int b)
-{
-    if(a==m){
-        for(int i=0;i<a;i++){
-            cout<<ans[i]<<" ";
-        }
-        cout<<"\n";
-        return;
+int f(int a){
+    if(a >= m){
+        return -1;
     }
-
-    else{
-        for(int i=b;i<=n;i++){
-            ans[a]=i;
-            f(a+1,i);
-        }
+    if(arr[a] + 1 == n+1){
+        return arr[a] = f(a + 1);
     }
+    return ++arr[a];
 }
 
-int main()
-{
+int main(){
     cin.tie(NULL);
-    cout.tie(NULL);
     ios_base::sync_with_stdio(false);
 
-    cin>>n>>m;
+    cin >> n >> m;
+    arr.resize(m, 1); // m의 값에 맞게 벡터 크기를 조정합니다.
 
-    f(0,1);
+    while(true){
+        for(int i = m - 1; i >= 0; i--){
+            cout << arr[i]<<" ";
+        }
+        cout << "\n";
+        if(f(0) == -1){
+            break;
+        }
+    }
+    return 0;
 }
