@@ -1,15 +1,19 @@
 #include<bits/stdc++.h>
-#define MAX 1'000'000
+#define MAX 
 using namespace std;
+using ll = long long;
+int arr[1'000'001];
 
-int arr[MAX];
-
-int f(int a)
-{
-    if(a==arr[a]){
-        return a;
+int f(int a){
+    if(arr[a]==a){
+        return arr[a];
+    }else{
+        return arr[a]=f(arr[a]);
     }
-    return f(arr[a]);
+}
+
+void unite(int a,int b){
+    
 }
 
 int main()
@@ -20,31 +24,28 @@ int main()
     int n,m;
     cin>>n>>m;
 
+    
     for(int i=0;i<=n;i++){
         arr[i]=i;
     }
-
     for(int i=0;i<m;i++){
         int a,b,c;
         cin>>a>>b>>c;
 
         if(a==0){
-            int br=f(b);
-            int cr=f(c);
+            int aa=f(b);
+            int bb=f(c);
 
-            if(br>cr){
-                arr[cr]=br;
+            if(aa<bb){
+                arr[bb]=aa;
+            }else{
+                arr[aa]=bb;
             }
-            else{
-                arr[br]=cr;
-            }
-        }
-        else{
+        }else{
             if(f(b)==f(c)){
-                cout<<"yes\n";
-            }
-            else{
-                cout<<"no\n";
+                cout<<"YES\n";
+            }else{
+                cout<<"NO\n";
             }
         }
     }
