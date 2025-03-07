@@ -1,56 +1,53 @@
 #include<bits/stdc++.h>
-#define MAX 20'001
+#define MAX 
 using namespace std;
-
+using ll = long long;
+using pii = pair<int,int>;
 int main()
 {
     cin.tie(NULL);
-    cout.tie(NULL);
     ios_base::sync_with_stdio(false);
 
-    int v,e,k;
-    cin>>v>>e>>k;
+    int n,m,k;
+    cin>>n>>m>>k;
+    k--;
+    vector<vector<pii>> v(n);
+    for(int i=0;i<m;i++){
+        int a,b,c;
+        cin>>a>>b>>c;
+        a--;b--;
 
-    vector<pair<int,int>> g[MAX];
-    int dist[MAX];
-
-    for (int i = 1; i <= v; i++) {
-    dist[i] = INT_MAX;
+        v[a].push_back({b,c});
     }
 
-    dist[k]=0;
-
-    for(int i=0;i<e;i++){
-        int u,v,w;
-        cin>>u>>v>>w;
-        g[u].push_back({w,v});
+    vector<int> dist(n+1);
+    for(int i=0;i<n;i++){
+        dist[i]=1e9;
     }
+    priority_queue<pii,vector<pii>,greater<>> pq;
+    pq.push({0,k});
     
-    set<pair<int,int>> q;
-    q.insert({0,k});
-
-    while(!q.empty()){
-        pair<int,int> c=*q.begin();
-        q.erase(q.begin());
-
-        if(c.first>dist[c.second]){
+    while(pq.size()){
+        auto [d,c]=pq.top();
+        pq.pop();
+        if(d>dist[c]){
             continue;
         }
-        
-        for(auto i:g[c.second]){
-            if(dist[c.second]+i.first<dist[i.second]){
-                dist[i.second]=dist[c.second]+i.first;
-                q.insert({dist[i.second],i.second});
+        dist[c]=d;
+
+        for(auto [to,dt]:v[c]){
+            if(dt+d<dist[to]){
+                dist[to]=dt+d;
+                pq.push({dt+d,to});
             }
         }
     }
 
-    for(int i=1;i<=v;i++){
-        if(dist[i]==INT_MAX){
+    for(int i=0;i<n;i++){
+        if(dist[i]==1e9){
             cout<<"INF"<<"\n";
-        }
-        else{
-            cout<<dist[i]<<"\n";
+        }else{
+        cout<<dist[i]<<"\n";
         }
     }
 }
