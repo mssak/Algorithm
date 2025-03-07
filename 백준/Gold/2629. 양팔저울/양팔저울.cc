@@ -13,12 +13,11 @@ int main()
     cin>>n;
 
     int flag=0;
-
+    dp[flag][0]=true;
+    
     for(int i=0;i<n;i++){
         int a;
         cin>>a;
-        dp[flag][0]=true;
-        dp[flag^1][a]=true;
         for(int j=0;j<MAX;j++){
             if(dp[flag][j]){
                 dp[flag^1][j]=true;
