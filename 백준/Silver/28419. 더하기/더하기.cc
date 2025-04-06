@@ -22,7 +22,6 @@ int main()
     if(n==3 && sm[0]>sm[1]){
         cout<<-1;
     }else{
-        sort(sm,sm+2);
-        cout<<sm[1]-sm[0];
+        cout<<abs(sm[1]-sm[0]);
     }
 }
