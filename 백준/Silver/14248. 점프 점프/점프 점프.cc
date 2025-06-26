@@ -18,13 +18,13 @@ int main()
     cin>>s;
 
     bool v[100'001]={0,};
-    queue<int> q;
+    stack<int> q;
     q.push(s);
     int cnt=1;
     v[s]=1;
 
     while(q.size()){
-        int c=q.front();
+        int c=q.top();
         q.pop();
         for(int nt:{c+arr[c],c-arr[c]}){
             if(nt>=1&&nt<=n&&!v[nt]){
