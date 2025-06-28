@@ -23,7 +23,7 @@ int main()
 
 	ll ans=0;
 	for(int i=1;i<=n;i++){
-		auto it=upper_bound(sm+i,sm+n+1,k+sm[i-1]);
+		auto it=upper_bound(sm+1,sm+n+1,k+sm[i-1]);
 		ans+=n-(it-sm)+1;
 	}
 
