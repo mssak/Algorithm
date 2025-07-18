@@ -23,19 +23,19 @@ int main()
 
     vector<int> dist(n+1,1e9);
 
-    priority_queue<pair<int,int>,vector<pair<int,int>>,greater<>> pq;
-    pq.push({0,s});
+    vector<pair<int,int>> pq;
+    pq.push_back({0,s});
     dist[s]=0;
 
     while(pq.size()){
-        auto [cd,cn]=pq.top();
-        pq.pop();
+        auto [cd,cn]=pq.back();
+        pq.pop_back();
         if(dist[cn]!=cd) continue;
 
         for(auto [nn,tmpd]:bus[cn]){
             int nd=cd+tmpd;
             if(dist[nn]>nd){
-                pq.push({nd,nn});
+                pq.push_back({nd,nn});
                 dist[nn]=nd;
             }
         }
