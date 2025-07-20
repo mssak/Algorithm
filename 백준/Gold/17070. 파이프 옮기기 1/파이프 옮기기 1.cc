@@ -23,11 +23,11 @@ int f(int y,int x,int d){
 
     int ans;
     if(d==0){
-        return f(y,x-1,0)+f(y,x-1,1);
+        return dp[y][x][d] = f(y,x-1,0)+f(y,x-1,1);
     }else if(d==1){
-        return f(y-1,x-1,0)+f(y-1,x-1,1)+f(y-1,x-1,2);
+        return dp[y][x][d]=f(y-1,x-1,0)+f(y-1,x-1,1)+f(y-1,x-1,2);
     }else if(d==2){
-        return f(y-1,x,1)+f(y-1,x,2);
+        return dp[y][x][d]=f(y-1,x,1)+f(y-1,x,2);
     }
 
     return dp[y][x][d]=ans;
