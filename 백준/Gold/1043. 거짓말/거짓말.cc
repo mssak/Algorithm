@@ -6,6 +6,7 @@ using ll = long long;
 int tn;
 int n,m;
 int uf[MAX];
+vector<int> sz(MAX);
 
 int f(int a){
     if(uf[a]!=a){
@@ -16,7 +17,14 @@ int f(int a){
 }
 
 void ad(int a,int b){
-    uf[f(a)]=f(b);
+    int fa=f(a);
+    int fb=f(b);
+    if(sz[fa]<sz[fb]){
+        swap(fa,fb);
+    }
+
+    uf[fb]=fa;
+    sz[fa]+=sz[fb];
 }
 
 int main()
@@ -33,7 +41,7 @@ int main()
     for(int i=0;i<tn;i++){
         int a;
         cin>>a;
-        uf[a]=0;
+        ad(0,a);
     }
 
 
