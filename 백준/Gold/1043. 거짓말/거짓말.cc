@@ -33,7 +33,7 @@ int main()
     for(int i=0;i<tn;i++){
         int a;
         cin>>a;
-        ad(0,a);
+        uf[a]=0;
     }
 
 
