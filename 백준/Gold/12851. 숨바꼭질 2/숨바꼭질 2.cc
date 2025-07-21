@@ -1,5 +1,5 @@
 #include<bits/stdc++.h>
-#define MAX 200'002
+#define MAX 100'002
 using namespace std;
 using ll = long long;
 using pii = pair<int,int>;
