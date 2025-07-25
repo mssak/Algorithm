@@ -8,7 +8,7 @@ int main()
     ios_base::sync_with_stdio(false);
 
     int arr[MAX][MAX];
-
+    
     int n,m;
     cin>>n>>m;
 
@@ -16,6 +16,9 @@ int main()
         for(int j=1;j<=n;j++){
             arr[i][j]=1e9;
         }
+    }
+    for(int i=1;i<=n;i++){
+        arr[i][i]=0;
     }
 
     for(int i=0;i<m;i++){
@@ -27,9 +30,6 @@ int main()
     for(int i=1;i<=n;i++){
         for(int j=1;j<=n;j++){
             for(int k=1;k<=n;k++){
-                if(j==k || j==i || k==i){
-                    continue;
-                }
                 arr[j][k]=min(arr[j][k],arr[j][i]+arr[i][k]);
             }
         }
